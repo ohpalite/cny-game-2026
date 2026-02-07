@@ -33,7 +33,7 @@
     </script>
 
     <style>
-        body { margin: 0; padding: 0; background-color: #ffe4e6; }
+        body { margin: 0; padding: 0; background-color: #dc2626; }
         @keyframes shake {
           0%, 100% { transform: translateX(0); }
           25% { transform: translateX(-8px); }
@@ -156,7 +156,7 @@
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
             const particles = [];
-            const colors = ['#DC2626', '#EF4444', '#F59E0B', '#FCD34D', '#FEF08A']; 
+            const colors = ['#FBBF24', '#F59E0B', '#EF4444', '#DC2626', '#FEF3C7']; 
             for (let i = 0; i < 150; i++) {
               particles.push({
                 x: Math.random() * canvas.width,
@@ -268,9 +268,9 @@
           };
 
           return (
-            <div className="fixed inset-0 z-50 bg-rose-50 overflow-y-auto animate-in fade-in slide-in-from-bottom-10 duration-300 flex flex-col">
-              <div className="sticky top-0 bg-white/90 backdrop-blur-md shadow-md z-40 p-4 flex justify-between items-center border-b-4 border-rose-200">
-                <h2 className="text-2xl md:text-3xl font-black text-rose-600 tracking-tight">Chinese New Year Class Photos</h2>
+            <div className="fixed inset-0 z-50 bg-red-50 overflow-y-auto animate-in fade-in slide-in-from-bottom-10 duration-300 flex flex-col">
+              <div className="sticky top-0 bg-white/90 backdrop-blur-md shadow-md z-40 p-4 flex justify-between items-center border-b-4 border-red-200">
+                <h2 className="text-2xl md:text-3xl font-black text-red-600 tracking-tight">Chinese New Year Class Photos</h2>
                 <button onClick={onClose} className="flex items-center gap-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-4 py-2 rounded-xl transition-colors">
                   <ChevronLeft /> Back to Game
                 </button>
@@ -282,8 +282,8 @@
                   {isUploading && (
                     <div className="fixed inset-0 z-[60] bg-black/40 flex items-center justify-center">
                         <div className="bg-white p-6 rounded-2xl flex flex-col items-center">
-                            <div className="w-12 h-12 border-4 border-rose-500 border-t-transparent rounded-full animate-spin mb-4"></div>
-                            <p className="font-bold text-rose-600">Uploading Photo...</p>
+                            <div className="w-12 h-12 border-4 border-red-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+                            <p className="font-bold text-red-600">Uploading Photo...</p>
                         </div>
                     </div>
                   )}
@@ -296,9 +296,9 @@
                           {level.classes.map((cls) => (
                             <label key={`${level.id}-${cls}`} className="relative group cursor-pointer">
                               <input type="file" accept="image/*" className="hidden" onChange={(e) => handleUpload(e, `${level.id}-${cls}`)} />
-                              <div className="bg-white border-2 border-slate-200 border-b-4 border-b-slate-300 rounded-xl p-4 flex flex-col items-center justify-center transition-all group-hover:-translate-y-1 group-hover:border-rose-300 group-hover:shadow-lg active:translate-y-0 active:border-b-2 h-24">
-                                <Camera className="w-6 h-6 text-slate-300 mb-1 group-hover:text-rose-400" />
-                                <span className="font-bold text-slate-600 group-hover:text-rose-600">{cls}</span>
+                              <div className="bg-white border-2 border-slate-200 border-b-4 border-b-slate-300 rounded-xl p-4 flex flex-col items-center justify-center transition-all group-hover:-translate-y-1 group-hover:border-red-300 group-hover:shadow-lg active:translate-y-0 active:border-b-2 h-24">
+                                <Camera className="w-6 h-6 text-slate-300 mb-1 group-hover:text-red-400" />
+                                <span className="font-bold text-slate-600 group-hover:text-red-600">{cls}</span>
                               </div>
                             </label>
                           ))}
@@ -316,7 +316,7 @@
                     <h3 className="text-3xl font-black text-green-600 mb-2">Photo Uploaded!</h3>
                     <p className="text-slate-500 mb-6 font-bold">Here is your unlocking code:</p>
                     <div className="bg-slate-100 border-2 border-slate-300 rounded-xl p-4 mb-6"><span className="font-mono text-4xl font-black text-slate-800 tracking-widest select-all">CNY2026</span></div>
-                    <button onClick={onClose} className="w-full bg-green-500 hover:bg-green-600 text-white font-black text-xl py-4 rounded-xl transition-transform hover:scale-105 shadow-lg border-b-4 border-green-700 active:border-b-0 active:translate-y-1">COLLECT RED PACKET</button>
+                    <button onClick={onClose} className="w-full bg-green-500 hover:bg-green-600 text-white font-black text-xl py-4 rounded-xl transition-transform hover:scale-105 shadow-lg border-b-4 border-green-700 active:border-b-0 active:translate-y-1">RETURN TO UNLOCK</button>
                   </div>
                 </div>
               )}
@@ -338,7 +338,6 @@
             const [flipped, setFlipped] = useState([]);
             const [solved, setSolved] = useState([]);
 
-            // Safety check: if lock is somehow undefined, return null to avoid crash
             if (!lock) return null;
 
             useEffect(() => {
@@ -420,117 +419,117 @@
 
             return (
                 <div className="fixed inset-0 z-40 flex items-center justify-center p-4 bg-red-900/90 backdrop-blur-sm animate-in fade-in duration-200">
-                <div className={`relative bg-red-800 border-4 border-yellow-500/50 w-full max-w-4xl rounded-[3rem] shadow-2xl overflow-hidden ${error ? 'animate-shake border-red-500 shadow-[0_0_30px_rgba(239,68,68,0.6)]' : ''}`}>
-                    <div className="bg-red-900/50 p-6 border-b-4 border-red-700 flex justify-between items-center">
+                <div className={`relative bg-red-800 border-4 border-yellow-500/50 w-full max-w-4xl rounded-[3rem] shadow-2xl overflow-hidden flex flex-col max-h-[90vh] ${error ? 'animate-shake border-red-500 shadow-[0_0_30px_rgba(239,68,68,0.6)]' : ''}`}>
+                    <div className="bg-red-900/50 p-6 border-b-4 border-red-700 flex justify-between items-center flex-shrink-0">
                     <div className="flex items-center gap-4">
                         <div className="text-yellow-400 p-2 bg-red-900 rounded-full">{lock.icon}</div>
-                        <h3 className="font-black text-3xl text-yellow-100 font-serif">{lock.title}</h3>
+                        <h3 className="font-black text-2xl md:text-3xl text-yellow-100 font-serif">{lock.title}</h3>
                     </div>
-                    <button onClick={onClose} className="text-red-300 hover:text-white transition-colors p-2 hover:bg-red-700 rounded-full"><XCircle size={40} /></button>
+                    <button onClick={onClose} className="text-red-300 hover:text-white transition-colors p-2 hover:bg-red-700 rounded-full"><XCircle size={32} /></button>
                     </div>
 
-                    <div className="p-10 max-h-[80vh] overflow-y-auto">
-                    <p className="text-4xl text-white mb-10 font-bold leading-relaxed text-center drop-shadow-md whitespace-pre-line">{lock.clue}</p>
+                    <div className="p-6 overflow-y-auto flex-1">
+                    <p className="text-xl md:text-2xl text-white mb-6 font-bold leading-relaxed text-center drop-shadow-md whitespace-pre-line">{lock.clue}</p>
 
                     {lock.video && (
-                        <div className="flex justify-center mb-8 relative group">
-                        <iframe width="560" height="315" src={`https://www.youtube.com/embed/${lock.video}?start=1`} title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen className="rounded-2xl shadow-xl border-4 border-yellow-500"></iframe>
+                        <div className="flex justify-center mb-6 relative group">
+                        <iframe width="560" height="315" src={`https://www.youtube.com/embed/${lock.video}?start=1`} title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen className="rounded-2xl shadow-xl border-4 border-yellow-500 max-h-[40vh] w-full object-contain"></iframe>
                         </div>
                     )}
 
                     {lock.image && (
-                        <div className="flex justify-center mb-8 relative group">
-                        <img src={lock.image} alt="Clue" onClick={() => setIsImageZoomed(true)} className="rounded-2xl shadow-xl border-4 border-yellow-500 max-h-64 object-contain bg-black/20 cursor-zoom-in transition-transform hover:scale-[1.02]" />
-                        <div className="absolute bottom-2 bg-black/60 text-white text-xs px-2 py-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">Click to Enlarge</div>
+                        <div className="flex justify-center mb-6 relative group">
+                        <img src={lock.image} alt="Clue" onClick={() => setIsImageZoomed(true)} className="rounded-2xl shadow-xl border-4 border-yellow-500 max-h-[40vh] object-contain bg-black/20 cursor-zoom-in transition-transform hover:scale-[1.02]" />
+                        <div className="absolute bottom-2 bg-black/60 text-white text-xs px-3 py-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">Click to Enlarge</div>
                         </div>
                     )}
 
                     {lock.link && (
                         <div className="flex justify-center mb-6">
-                            <a href={lock.link} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 bg-yellow-500 hover:bg-yellow-400 text-red-900 font-black text-2xl py-4 px-8 rounded-2xl transition-transform hover:scale-105 shadow-xl border-b-4 border-yellow-700 active:border-b-0 active:translate-y-1">
-                            <ExternalLink size={28} /> SOLVE PUZZLE
+                            <a href={lock.link} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 bg-yellow-500 hover:bg-yellow-400 text-red-900 font-black text-xl py-3 px-6 rounded-2xl transition-transform hover:scale-105 shadow-xl border-b-4 border-yellow-700 active:border-b-0 active:translate-y-1">
+                            <ExternalLink size={24} /> SOLVE PUZZLE
                             </a>
                         </div>
                     )}
 
                     {(lock.type === 'text' || lock.type === 'numeric' || lock.type === 'bingo_launch') && (
-                        <div className="space-y-8 max-w-2xl mx-auto">
+                        <div className="space-y-6 max-w-xl mx-auto">
                         {lock.type === 'bingo_launch' && (
-                            <div className="flex justify-center mb-6">
-                            <button onClick={() => setShowInternalBingo(true)} className="flex items-center gap-3 bg-yellow-500 hover:bg-yellow-400 text-red-900 font-black text-2xl py-4 px-8 rounded-2xl transition-transform hover:scale-105 shadow-xl border-b-4 border-yellow-700 active:border-b-0 active:translate-y-1">
-                                <ExternalLink size={28} /> CNY CLASS PHOTO
+                            <div className="flex justify-center mb-4">
+                            <button onClick={() => setShowInternalBingo(true)} className="flex items-center gap-3 bg-yellow-500 hover:bg-yellow-400 text-red-900 font-black text-xl py-3 px-6 rounded-2xl transition-transform hover:scale-105 shadow-xl border-b-4 border-yellow-700 active:border-b-0 active:translate-y-1">
+                                <ExternalLink size={24} /> CNY CLASS PHOTO
                             </button>
                             </div>
                         )}
-                        <form onSubmit={handleSubmit} className="space-y-6">
-                            <input autoFocus type={lock.type === 'numeric' ? 'tel' : 'text'} value={inputValue} onChange={(e) => setInputValue(e.target.value)} placeholder={lock.type === 'bingo_launch' ? "ENTER CODE..." : "ANSWER..."} className="w-full bg-red-900 border-4 border-red-600 rounded-[2rem] px-8 py-6 text-5xl text-center text-yellow-100 placeholder-red-400 focus:outline-none focus:border-yellow-500 focus:ring-4 focus:ring-yellow-500/20 transition-all font-black uppercase tracking-widest" />
-                            <button type="submit" className="w-full bg-gradient-to-r from-yellow-500 to-yellow-400 hover:from-yellow-400 hover:to-yellow-300 text-red-900 font-black text-3xl py-6 rounded-[2rem] transition-all shadow-lg border-b-8 border-yellow-600 active:border-b-0 active:translate-y-2">COLLECT RED PACKET</button>
+                        <form onSubmit={handleSubmit} className="space-y-4">
+                            <input autoFocus type={lock.type === 'numeric' ? 'tel' : 'text'} value={inputValue} onChange={(e) => setInputValue(e.target.value)} placeholder={lock.type === 'bingo_launch' ? "ENTER CODE..." : "ANSWER..."} className="w-full bg-red-900 border-4 border-red-600 rounded-2xl px-6 py-4 text-4xl text-center text-yellow-100 placeholder-red-400 focus:outline-none focus:border-yellow-500 focus:ring-4 focus:ring-yellow-500/20 transition-all font-black uppercase tracking-widest" />
+                            <button type="submit" className="w-full bg-gradient-to-r from-yellow-500 to-yellow-400 hover:from-yellow-400 hover:to-yellow-300 text-red-900 font-black text-2xl py-4 rounded-2xl transition-all shadow-lg border-b-8 border-yellow-600 active:border-b-0 active:translate-y-2">COLLECT RED PACKET</button>
                         </form>
                         </div>
                     )}
 
                     {lock.type === 'directional' && (
-                        <div className="space-y-8">
-                        <div className="flex justify-center gap-4 mb-4 h-12">
+                        <div className="space-y-6">
+                        <div className="flex justify-center gap-4 mb-2 h-10">
                             {sequence.map((dir, i) => (
-                            <span key={i} className="text-yellow-400 font-black text-4xl drop-shadow-md animate-in zoom-in">
-                                {dir === 'UP' && <ArrowUp size={40} />}
-                                {dir === 'DOWN' && <ArrowDown size={40} />}
-                                {dir === 'LEFT' && <ArrowLeft size={40} />}
-                                {dir === 'RIGHT' && <ArrowRight size={40} />}
+                            <span key={i} className="text-yellow-400 font-black text-3xl drop-shadow-md animate-in zoom-in">
+                                {dir === 'UP' && <ArrowUp size={32} />}
+                                {dir === 'DOWN' && <ArrowDown size={32} />}
+                                {dir === 'LEFT' && <ArrowLeft size={32} />}
+                                {dir === 'RIGHT' && <ArrowRight size={32} />}
                             </span>
                             ))}
                         </div>
-                        <div className="grid grid-cols-3 gap-4 max-w-[300px] mx-auto">
+                        <div className="grid grid-cols-3 gap-3 max-w-[250px] mx-auto">
                             <div />
-                            <button onClick={() => handleSequenceInput('UP')} className="p-6 bg-red-700 hover:bg-yellow-500 hover:text-red-900 text-yellow-100 rounded-2xl flex items-center justify-center transition-colors shadow-lg active:scale-95 border-b-4 border-red-900"><ArrowUp size={40} /></button>
+                            <button onClick={() => handleSequenceInput('UP')} className="p-4 bg-red-700 hover:bg-yellow-500 hover:text-red-900 text-yellow-100 rounded-xl flex items-center justify-center transition-colors shadow-lg active:scale-95 border-b-4 border-red-900"><ArrowUp size={32} /></button>
                             <div />
-                            <button onClick={() => handleSequenceInput('LEFT')} className="p-6 bg-red-700 hover:bg-yellow-500 hover:text-red-900 text-yellow-100 rounded-2xl flex items-center justify-center transition-colors shadow-lg active:scale-95 border-b-4 border-red-900"><ArrowLeft size={40} /></button>
-                            <button onClick={() => handleSequenceInput('DOWN')} className="p-6 bg-red-700 hover:bg-yellow-500 hover:text-red-900 text-yellow-100 rounded-2xl flex items-center justify-center transition-colors shadow-lg active:scale-95 border-b-4 border-red-900"><ArrowDown size={40} /></button>
-                            <button onClick={() => handleSequenceInput('RIGHT')} className="p-6 bg-red-700 hover:bg-yellow-500 hover:text-red-900 text-yellow-100 rounded-2xl flex items-center justify-center transition-colors shadow-lg active:scale-95 border-b-4 border-red-900"><ArrowRight size={40} /></button>
+                            <button onClick={() => handleSequenceInput('LEFT')} className="p-4 bg-red-700 hover:bg-yellow-500 hover:text-red-900 text-yellow-100 rounded-xl flex items-center justify-center transition-colors shadow-lg active:scale-95 border-b-4 border-red-900"><ArrowLeft size={32} /></button>
+                            <button onClick={() => handleSequenceInput('DOWN')} className="p-4 bg-red-700 hover:bg-yellow-500 hover:text-red-900 text-yellow-100 rounded-xl flex items-center justify-center transition-colors shadow-lg active:scale-95 border-b-4 border-red-900"><ArrowDown size={32} /></button>
+                            <button onClick={() => handleSequenceInput('RIGHT')} className="p-4 bg-red-700 hover:bg-yellow-500 hover:text-red-900 text-yellow-100 rounded-xl flex items-center justify-center transition-colors shadow-lg active:scale-95 border-b-4 border-red-900"><ArrowRight size={32} /></button>
                         </div>
                         </div>
                     )}
 
                     {lock.type === 'color' && (
-                        <div className="space-y-8">
-                        <div className="flex justify-center gap-4 mb-4 h-10">
+                        <div className="space-y-6">
+                        <div className="flex justify-center gap-3 mb-2 h-8">
                             {sequence.map((col, i) => (
-                            <div key={i} className={`w-8 h-8 rounded-full bg-${col}-500 ring-4 ring-white/20 shadow-[0_0_15px_currentColor] animate-in zoom-in`} style={{backgroundColor: col === 'yellow' ? '#EAB308' : '#EF4444'}} />
+                            <div key={i} className={`w-6 h-6 rounded-full bg-${col}-500 ring-4 ring-white/20 shadow-[0_0_15px_currentColor] animate-in zoom-in`} style={{backgroundColor: col === 'yellow' ? '#EAB308' : '#EF4444'}} />
                             ))}
                         </div>
-                        <div className="flex justify-center gap-10">
-                            <button onClick={() => handleSequenceInput('red')} className="w-40 h-40 rounded-3xl transform transition-all active:scale-95 hover:scale-105 shadow-xl border-b-8 border-red-800 bg-red-500 flex flex-col items-center justify-center gap-2 group">
-                                <div className="text-white font-black text-2xl group-hover:scale-110 transition-transform">RED</div>
+                        <div className="flex justify-center gap-6">
+                            <button onClick={() => handleSequenceInput('red')} className="w-32 h-32 rounded-2xl transform transition-all active:scale-95 hover:scale-105 shadow-xl border-b-8 border-red-800 bg-red-500 flex flex-col items-center justify-center gap-2 group">
+                                <div className="text-white font-black text-xl group-hover:scale-110 transition-transform">RED</div>
                             </button>
-                            <button onClick={() => handleSequenceInput('yellow')} className="w-40 h-40 rounded-3xl transform transition-all active:scale-95 hover:scale-105 shadow-xl border-b-8 border-yellow-600 bg-yellow-400 flex flex-col items-center justify-center gap-2 group">
-                                <div className="text-red-900 font-black text-2xl group-hover:scale-110 transition-transform">GOLD</div>
+                            <button onClick={() => handleSequenceInput('yellow')} className="w-32 h-32 rounded-2xl transform transition-all active:scale-95 hover:scale-105 shadow-xl border-b-8 border-yellow-600 bg-yellow-400 flex flex-col items-center justify-center gap-2 group">
+                                <div className="text-red-900 font-black text-xl group-hover:scale-110 transition-transform">GOLD</div>
                             </button>
                         </div>
                         </div>
                     )}
 
                     {lock.type === 'memory' && (
-                        <div className="grid grid-cols-4 gap-4 max-w-2xl mx-auto">
+                        <div className="grid grid-cols-4 gap-3 max-w-xl mx-auto">
                         {cards.map((card, index) => {
                             const isFlipped = flipped.includes(index) || solved.includes(card.id);
                             return (
-                            <button key={index} onClick={() => handleCardClick(index)} className={`aspect-square rounded-2xl flex items-center justify-center shadow-lg transition-all duration-300 transform perspective-1000 border-b-8 ${isFlipped ? 'bg-yellow-100 text-red-600 rotate-y-180 border-yellow-300' : 'bg-red-700 border-red-900 hover:bg-red-600 hover:-translate-y-1'}`}>
-                                {isFlipped ? <div className="animate-in zoom-in spin-in-180 duration-300 scale-150">{card.icon}</div> : <div className="text-yellow-500/30 text-4xl font-serif font-bold">福</div>}
+                            <button key={index} onClick={() => handleCardClick(index)} className={`aspect-square rounded-xl flex items-center justify-center shadow-lg transition-all duration-300 transform perspective-1000 border-b-8 ${isFlipped ? 'bg-yellow-100 text-red-600 rotate-y-180 border-yellow-300' : 'bg-red-700 border-red-900 hover:bg-red-600 hover:-translate-y-1'}`}>
+                                {isFlipped ? <div className="animate-in zoom-in spin-in-180 duration-300 scale-150">{card.icon}</div> : <div className="text-yellow-500/30 text-3xl font-serif font-bold">福</div>}
                             </button>
                             );
                         })}
                         </div>
                     )}
 
-                    <div className="mt-10 pt-8 border-t-2 border-red-700/50 flex justify-center">
+                    <div className="mt-6 pt-4 border-t-2 border-red-700/50 flex justify-center">
                         {!showHint ? (
-                        <button onClick={() => { sounds.click(); setShowHint(true); }} className="flex items-center gap-3 text-red-300 hover:text-yellow-300 text-xl mx-auto transition-colors font-bold px-6 py-3 rounded-full hover:bg-red-900/50">
-                            <HelpCircle size={24} /> Need a hint?
+                        <button onClick={() => { sounds.click(); setShowHint(true); }} className="flex items-center gap-2 text-red-300 hover:text-yellow-300 text-lg mx-auto transition-colors font-bold px-4 py-2 rounded-full hover:bg-red-900/50">
+                            <HelpCircle size={20} /> Need a hint?
                         </button>
                         ) : (
-                        <div className="bg-yellow-900/40 border-2 border-yellow-500/30 rounded-2xl p-6 text-center animate-in fade-in max-w-lg">
-                            <p className="text-yellow-400 text-xl font-bold">HINT: {lock.hint}</p>
+                        <div className="bg-yellow-900/40 border-2 border-yellow-500/30 rounded-xl p-4 text-center animate-in fade-in max-w-md">
+                            <p className="text-yellow-400 text-lg font-bold">HINT: {lock.hint}</p>
                         </div>
                         )}
                     </div>
@@ -596,7 +595,7 @@
             { id: 4, type: 'color', title: 'Lucky Colors', clue: 'Tap order: Red Lantern, Gold Coin, Red Firecracker, Gold Ingot.', hint: 'Red, Yellow, Red, Yellow', answer: ['red', 'yellow', 'red', 'yellow'], isLocked: true, icon: <Scroll className="w-12 h-12" /> },
             { id: 5, type: 'numeric', title: 'Festive Video', clue: 'Watch the video and answer:\n1. How many times did you hear "gong xi"?\n2. How many types of zodiac animals appeared?', hint: 'Add the two numbers together.', answer: '19', isLocked: true, icon: <Video className="w-12 h-12" />, video: 'fS1MyAGXaKg' },
             { id: 6, type: 'text', title: 'The Greeting', clue: 'Finish: "Gong Xi Fa ___"', hint: 'Rhymes with "Eye".', answer: 'CAI', isLocked: true, icon: <Gift className="w-12 h-12" /> },
-            { id: 7, type: 'bingo_launch', title: 'Class Photo', clue: 'Upload a Class Photo with "Heart" signs❤️ on the CNY Class Photo page. Enter the code you receive!', hint: 'The code is "CNY" followed by the year.', answer: 'CNY2026', isLocked: true, icon: <Camera className="w-12 h-12" /> },
+            { id: 7, type: 'bingo_launch', title: 'Class Photo', clue: 'Upload a Class Photo with "Heart" signs ❤️ on the CNY Class Photo page. Enter the code you receive!', hint: 'The code is "CNY" followed by the year.', answer: 'CNY2026', isLocked: true, icon: <Camera className="w-12 h-12" /> },
             { id: 8, type: 'memory', title: 'Fortune Match', clue: 'Find all matching pairs!', hint: '4 pairs to find.', answer: 'MEMORY_SOLVED', isLocked: true, icon: <LayoutGrid className="w-12 h-12" /> }
           ]);
 
@@ -654,7 +653,7 @@
           };
 
           return (
-            <div ref={containerRef} className="min-h-screen bg-rose-100 text-red-900 font-sans selection:bg-yellow-400 selection:text-red-900 overflow-hidden relative">
+            <div ref={containerRef} className="min-h-screen bg-red-600 text-white font-sans selection:bg-yellow-400 selection:text-red-900 overflow-hidden relative">
               
               {!isMuted && gameState !== 'start' && (
                 <div className="fixed top-0 left-0 w-[1px] h-[1px] opacity-[0.01] overflow-hidden pointer-events-none z-0">
@@ -672,8 +671,9 @@
               </div>
 
               <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-                <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-orange-300 rounded-full blur-[120px] opacity-20" />
-                <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-yellow-300 rounded-full blur-[120px] opacity-20" />
+                <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-orange-500 rounded-full blur-[120px] opacity-60" />
+                <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-yellow-500 rounded-full blur-[120px] opacity-40" />
+                <div className="absolute inset-0 opacity-10" style={{backgroundImage: 'radial-gradient(#FCD34D 1px, transparent 1px)', backgroundSize: '30px 30px'}}></div>
               </div>
 
               {gameState === 'start' && (
@@ -705,22 +705,23 @@
                   </header>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-6 flex-grow content-center pb-8">
                     {locks.map((lock) => (
-                      <button key={lock.id} onClick={() => { if (lock.isLocked) { sounds.click(); setActiveLockId(lock.id); } }} disabled={!lock.isLocked} className={`relative group flex flex-col items-center justify-center p-6 rounded-[2rem] border-4 transition-all duration-300 h-full min-h-[180px] ${!lock.isLocked ? 'bg-yellow-500/90 border-yellow-600 shadow-[0_0_30px_rgba(234,179,8,0.5)] transform scale-[1.02]' : 'bg-red-800 border-red-700 hover:border-yellow-400 hover:bg-red-700 hover:scale-[1.05] hover:shadow-2xl cursor-pointer'}`}>
-                        <div className={`mb-4 p-5 rounded-full transition-colors duration-500 ${!lock.isLocked ? 'bg-red-600 text-yellow-300' : 'bg-red-900 text-red-200 group-hover:bg-yellow-500/20 group-hover:text-yellow-400'}`}>
+                      <button key={lock.id} onClick={() => { if (lock.isLocked) { sounds.click(); setActiveLockId(lock.id); } }} disabled={!lock.isLocked} className={`relative group flex flex-col items-center justify-center p-6 rounded-[2rem] border-4 transition-all duration-300 h-full min-h-[180px] ${!lock.isLocked ? 'bg-yellow-500/20 border-yellow-500 shadow-[0_0_30px_rgba(234,179,8,0.3)]' : 'bg-red-800 border-red-700 hover:border-yellow-400 hover:bg-red-700 hover:scale-[1.05] hover:shadow-2xl cursor-pointer'}`}>
+                        <div className={`mb-4 p-5 rounded-full transition-colors duration-500 ${!lock.isLocked ? 'bg-yellow-500 text-red-900' : 'bg-red-900 text-red-200 group-hover:bg-yellow-500/20 group-hover:text-yellow-400'}`}>
                           {lock.isLocked ? <Mail size={48} /> : <MailOpen size={48} className="animate-in zoom-in" />}
                         </div>
-                        <h3 className={`font-black text-2xl mb-1 text-center leading-tight ${!lock.isLocked ? 'text-red-800' : 'text-white'}`}>{!lock.isLocked ? 'COLLECTED!' : lock.title}</h3>
+                        <h3 className={`font-black text-2xl mb-1 text-center leading-tight ${!lock.isLocked ? 'text-yellow-400' : 'text-white'}`}>{!lock.isLocked ? 'COLLECTED!' : lock.title}</h3>
+                        <div className="absolute top-5 right-5"><div className={`w-5 h-5 rounded-full ${!lock.isLocked ? 'bg-yellow-500 shadow-[0_0_15px_rgba(234,179,8,1)]' : 'bg-red-500 shadow-[0_0_15px_rgba(239,68,68,0.8)]'}`} /></div>
                       </button>
                     ))}
                   </div>
-                  <div className="text-center text-red-800 text-3xl font-black font-serif drop-shadow-sm">{locks.filter(l => !l.isLocked).length} / {locks.length} RED PACKETS COLLECTED</div>
+                  <div className="text-center text-red-100 text-3xl font-black font-serif drop-shadow-sm">{locks.filter(l => !l.isLocked).length} / {locks.length} RED PACKETS COLLECTED</div>
                 </div>
               )}
 
               {activeLockId && <PuzzleModal lock={locks.find(l => l.id === activeLockId)} onClose={() => { sounds.click(); setActiveLockId(null); }} onUnlock={handleUnlock} sounds={sounds} db={db} className={className} />}
 
               {gameState === 'won' && (
-                <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-rose-100/95 backdrop-blur-xl animate-in fade-in duration-1000 overflow-y-auto py-10">
+                <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-red-700/95 backdrop-blur-xl animate-in fade-in duration-1000 overflow-y-auto py-10">
                   <FireConfetti />
                   <div className="relative z-10 w-full max-w-4xl mx-auto px-4 flex flex-col items-center">
                     <div className="bg-red-800/90 border-4 border-yellow-500/50 rounded-[3rem] shadow-2xl p-8 mb-8 w-full max-w-2xl text-center transform scale-100 animate-in zoom-in-50 duration-500">
@@ -759,3 +760,4 @@
     </script>
 </body>
 </html>
+
