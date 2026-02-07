@@ -8,6 +8,9 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+
     <!-- Babel for JSX -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
@@ -27,13 +30,50 @@
 
     <!-- Config Placeholders -->
     <script>
-        // FIXED CONFIGURATION - Valid JSON on a single line
+        // YOUR CONFIGURATION (Pre-filled)
         window.__firebase_config = '{"apiKey":"AIzaSyACTQvtejx8422cwlOskqO_HfPAeOaTe4o","authDomain":"cny-game.firebaseapp.com","projectId":"cny-game","storageBucket":"cny-game.firebasestorage.app","messagingSenderId":"753520860642","appId":"1:753520860642:web:f394ebfb1060774dde2dbb","measurementId":"G-KESDRQPJFQ"}'; 
         window.__app_id = 'cny-breakout-2026';
     </script>
 
     <style>
-        body { margin: 0; padding: 0; background-color: #ffe4e6; }
+        body { 
+            margin: 0; 
+            padding: 0; 
+            font-family: 'Outfit', sans-serif;
+            background-color: #0f0c29; 
+            overflow-x: hidden;
+        }
+        
+        /* Glassmorphism Utilities */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .glass-input {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        
+        .glass-button {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
+            border: 1px solid rgba(255,255,255,0.2);
+            backdrop-filter: blur(4px);
+        }
+
         @keyframes shake {
           0%, 100% { transform: translateX(0); }
           25% { transform: translateX(-8px); }
@@ -42,9 +82,38 @@
         .animate-shake {
           animation: shake 0.3s cubic-bezier(.36,.07,.19,.97) both;
         }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.3); }
+        
+        /* Background Animated Gradient */
+        .bg-animated {
+            background: linear-gradient(-45deg, #7f1d1d, #4c0519, #831843, #9f1239);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            position: fixed;
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            z-index: -2;
+        }
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
     </style>
 </head>
 <body>
+    <div class="bg-animated"></div>
+    <!-- Floating Orbs for depth -->
+    <div style="position: fixed; top: 10%; left: 10%; width: 300px; height: 300px; background: radial-gradient(circle, rgba(251,191,36,0.2) 0%, rgba(0,0,0,0) 70%); border-radius: 50%; z-index: -1; filter: blur(40px);"></div>
+    <div style="position: fixed; bottom: 10%; right: 10%; width: 400px; height: 400px; background: radial-gradient(circle, rgba(239,68,68,0.2) 0%, rgba(0,0,0,0) 70%); border-radius: 50%; z-index: -1; filter: blur(50px);"></div>
+
     <div id="root"></div>
 
     <script type="text/babel" data-type="module">
@@ -144,7 +213,7 @@
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
             const particles = [];
-            const colors = ['#DC2626', '#EF4444', '#F59E0B', '#FCD34D', '#FEF08A']; 
+            const colors = ['#FBBF24', '#F59E0B', '#EF4444', '#DC2626', '#FEF3C7']; 
             for (let i = 0; i < 150; i++) {
               particles.push({
                 x: Math.random() * canvas.width,
@@ -186,15 +255,14 @@
           const [isUploading, setIsUploading] = useState(false);
 
           const levels = [
-            { id: 'P1', color: 'bg-red-500 border-red-700', classes: ['Care', 'Charity', 'Faith', 'Grace', 'Hope', 'Joy'] },
-            { id: 'P2', color: 'bg-orange-500 border-orange-700', classes: ['Care', 'Charity', 'Faith', 'Grace', 'Hope', 'Joy'] },
-            { id: 'P3', color: 'bg-yellow-500 border-yellow-700 text-red-900', classes: ['Care', 'Charity', 'Faith', 'Grace', 'Hope', 'Joy'] },
-            { id: 'P4', color: 'bg-green-500 border-green-700', classes: ['Care', 'Charity', 'Faith', 'Grace', 'Hope', 'Joy', 'Love'] },
-            { id: 'P5', color: 'bg-blue-500 border-blue-700', classes: ['Care', 'Charity', 'Faith', 'Grace', 'Hope', 'Joy'] },
-            { id: 'P6', color: 'bg-purple-500 border-purple-700', classes: ['Care', 'Charity', 'Faith', 'Grace', 'Hope', 'Joy'] },
+            { id: 'P1', color: 'bg-red-500/80 border-red-400', classes: ['Care', 'Charity', 'Faith', 'Grace', 'Hope', 'Joy'] },
+            { id: 'P2', color: 'bg-orange-500/80 border-orange-400', classes: ['Care', 'Charity', 'Faith', 'Grace', 'Hope', 'Joy'] },
+            { id: 'P3', color: 'bg-yellow-500/80 border-yellow-400 text-red-900', classes: ['Care', 'Charity', 'Faith', 'Grace', 'Hope', 'Joy'] },
+            { id: 'P4', color: 'bg-green-500/80 border-green-400', classes: ['Care', 'Charity', 'Faith', 'Grace', 'Hope', 'Joy', 'Love'] },
+            { id: 'P5', color: 'bg-blue-500/80 border-blue-400', classes: ['Care', 'Charity', 'Faith', 'Grace', 'Hope', 'Joy'] },
+            { id: 'P6', color: 'bg-purple-500/80 border-purple-400', classes: ['Care', 'Charity', 'Faith', 'Grace', 'Hope', 'Joy'] },
           ];
 
-          // Utility to resize image before upload
           const compressImage = (file) => {
             return new Promise((resolve) => {
               const reader = new FileReader();
@@ -204,13 +272,13 @@
                 img.src = event.target.result;
                 img.onload = () => {
                   const canvas = document.createElement('canvas');
-                  const MAX_WIDTH = 800; // Increased resolution slightly for Slides
+                  const MAX_WIDTH = 800; 
                   const scaleSize = MAX_WIDTH / img.width;
                   canvas.width = MAX_WIDTH;
                   canvas.height = img.height * scaleSize;
                   const ctx = canvas.getContext('2d');
                   ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                  resolve(canvas.toDataURL('image/jpeg', 0.8)); // Compress to JPEG
+                  resolve(canvas.toDataURL('image/jpeg', 0.8));
                 }
               }
             })
@@ -224,7 +292,6 @@
                   const base64Image = await compressImage(file);
                   const uploadClassName = className || 'Unknown Class';
                   
-                  // 1. Save to Firebase (if available)
                   if (db) {
                      await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'photo_submissions'), {
                         className: uploadClassName,
@@ -234,11 +301,10 @@
                      });
                   }
 
-                  // 2. Export to Google Slides
                   if (GAS_WEB_APP_URL) {
                       await fetch(GAS_WEB_APP_URL, {
                           method: 'POST',
-                          mode: 'no-cors', // IMPORTANT: GAS requires no-cors for simple opaque firing
+                          mode: 'no-cors', 
                           body: JSON.stringify({
                               image: base64Image,
                               className: uploadClassName,
@@ -259,22 +325,22 @@
           };
 
           return (
-            <div className="fixed inset-0 z-50 bg-rose-50 overflow-y-auto animate-in fade-in slide-in-from-bottom-10 duration-300 flex flex-col">
-              <div className="sticky top-0 bg-white/90 backdrop-blur-md shadow-md z-40 p-4 flex justify-between items-center border-b-4 border-rose-200">
-                <h2 className="text-2xl md:text-3xl font-black text-rose-600 tracking-tight">Chinese New Year Class Photos</h2>
-                <button onClick={onClose} className="flex items-center gap-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-4 py-2 rounded-xl transition-colors">
-                  <ChevronLeft /> Back to Game
+            <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md overflow-y-auto animate-in fade-in slide-in-from-bottom-10 duration-300 flex flex-col">
+              <div className="sticky top-0 bg-white/10 backdrop-blur-lg shadow-lg z-40 p-4 flex justify-between items-center border-b border-white/20">
+                <h2 className="text-2xl md:text-3xl font-black text-white tracking-tight drop-shadow-lg">Class Photo Submission</h2>
+                <button onClick={onClose} className="flex items-center gap-2 glass-button text-white font-bold px-4 py-2 rounded-xl transition-colors hover:bg-white/20">
+                  <ChevronLeft /> Back
                 </button>
               </div>
               <div className="flex-grow p-4 md:p-8">
                 <div className="max-w-[1600px] mx-auto">
-                  <p className="text-center text-slate-500 text-lg mb-8">Click your class tile to upload your photo and reveal the secret code!</p>
+                  <p className="text-center text-white/80 text-lg mb-8 font-light">Find your level and class, then tap to upload your photo.</p>
                   
                   {isUploading && (
-                    <div className="fixed inset-0 z-[60] bg-black/40 flex items-center justify-center">
-                        <div className="bg-white p-6 rounded-2xl flex flex-col items-center">
-                            <div className="w-12 h-12 border-4 border-rose-500 border-t-transparent rounded-full animate-spin mb-4"></div>
-                            <p className="font-bold text-rose-600">Uploading Photo...</p>
+                    <div className="fixed inset-0 z-[60] bg-black/60 flex items-center justify-center backdrop-blur-sm">
+                        <div className="glass-panel p-8 rounded-3xl flex flex-col items-center">
+                            <div className="w-16 h-16 border-4 border-yellow-400 border-t-transparent rounded-full animate-spin mb-4"></div>
+                            <p className="font-bold text-yellow-400 text-xl">Uploading...</p>
                         </div>
                     </div>
                   )}
@@ -282,14 +348,14 @@
                   <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
                     {levels.map((level) => (
                       <div key={level.id} className="flex flex-col gap-3">
-                        <div className={`${level.color} text-white font-black text-3xl text-center py-4 rounded-xl shadow-md border-b-4 border-black/20`}>{level.id}</div>
+                        <div className={`${level.color} backdrop-blur-md text-white font-black text-3xl text-center py-4 rounded-xl shadow-lg border border-white/20`}>{level.id}</div>
                         <div className="flex flex-col gap-3">
                           {level.classes.map((cls) => (
                             <label key={`${level.id}-${cls}`} className="relative group cursor-pointer">
                               <input type="file" accept="image/*" className="hidden" onChange={(e) => handleUpload(e, `${level.id}-${cls}`)} />
-                              <div className="bg-white border-2 border-slate-200 border-b-4 border-b-slate-300 rounded-xl p-4 flex flex-col items-center justify-center transition-all group-hover:-translate-y-1 group-hover:border-rose-300 group-hover:shadow-lg active:translate-y-0 active:border-b-2 h-24">
-                                <Camera className="w-6 h-6 text-slate-300 mb-1 group-hover:text-rose-400" />
-                                <span className="font-bold text-slate-600 group-hover:text-rose-600">{cls}</span>
+                              <div className="glass-card p-4 rounded-xl flex flex-col items-center justify-center transition-all group-hover:-translate-y-1 group-hover:bg-white/10 group-hover:border-yellow-400/50 h-28">
+                                <Camera className="w-8 h-8 text-white/60 mb-2 group-hover:text-yellow-400 transition-colors" />
+                                <span className="font-bold text-white/90 group-hover:text-white transition-colors">{cls}</span>
                               </div>
                             </label>
                           ))}
@@ -300,14 +366,14 @@
                 </div>
               </div>
               {success && (
-                <div className="fixed inset-0 z-[60] bg-black/60 flex items-center justify-center p-4 animate-in fade-in">
-                  <div className="bg-white rounded-[2rem] p-8 max-w-md w-full text-center shadow-2xl border-4 border-green-500 animate-in zoom-in duration-300 relative">
-                    <button onClick={() => setSuccess(false)} className="absolute top-4 right-4 text-slate-400 hover:text-slate-600"><XCircle /></button>
-                    <div className="text-6xl mb-4">🧧</div>
-                    <h3 className="text-3xl font-black text-green-600 mb-2">Photo Uploaded!</h3>
-                    <p className="text-slate-500 mb-6 font-bold">Here is your unlocking code:</p>
-                    <div className="bg-slate-100 border-2 border-slate-300 rounded-xl p-4 mb-6"><span className="font-mono text-4xl font-black text-slate-800 tracking-widest select-all">CNY2026</span></div>
-                    <button onClick={onClose} className="w-full bg-green-500 hover:bg-green-600 text-white font-black text-xl py-4 rounded-xl transition-transform hover:scale-105 shadow-lg border-b-4 border-green-700 active:border-b-0 active:translate-y-1">RETURN TO UNLOCK</button>
+                <div className="fixed inset-0 z-[60] bg-black/80 flex items-center justify-center p-4 animate-in fade-in backdrop-blur-sm">
+                  <div className="glass-panel bg-white/10 rounded-[2rem] p-10 max-w-md w-full text-center shadow-2xl border border-white/20 animate-in zoom-in duration-300 relative">
+                    <button onClick={() => setSuccess(false)} className="absolute top-4 right-4 text-white/60 hover:text-white"><XCircle /></button>
+                    <div className="text-7xl mb-6">🧧</div>
+                    <h3 className="text-4xl font-black text-yellow-400 mb-2">Success!</h3>
+                    <p className="text-white/80 mb-8 font-light text-lg">Photo received. Here is your code:</p>
+                    <div className="bg-black/30 border border-white/10 rounded-2xl p-6 mb-8"><span className="font-mono text-5xl font-black text-white tracking-widest select-all drop-shadow-glow">CNY2026</span></div>
+                    <button onClick={onClose} className="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white font-black text-xl py-4 rounded-xl transition-transform hover:scale-[1.02] shadow-lg border border-white/20">COLLECT RED PACKET</button>
                   </div>
                 </div>
               )}
@@ -329,7 +395,6 @@
             const [flipped, setFlipped] = useState([]);
             const [solved, setSolved] = useState([]);
 
-            // Safety check: if lock is somehow undefined, return null to avoid crash
             if (!lock) return null;
 
             useEffect(() => {
@@ -410,14 +475,14 @@
             }
 
             return (
-                <div className="fixed inset-0 z-40 flex items-center justify-center p-4 bg-red-900/90 backdrop-blur-sm animate-in fade-in duration-200">
-                <div className={`relative bg-red-800 border-4 border-yellow-500/50 w-full max-w-4xl rounded-[3rem] shadow-2xl overflow-hidden ${error ? 'animate-shake border-red-500 shadow-[0_0_30px_rgba(239,68,68,0.6)]' : ''}`}>
-                    <div className="bg-red-900/50 p-6 border-b-4 border-red-700 flex justify-between items-center">
+                <div className="fixed inset-0 z-40 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
+                <div className={`relative glass-panel rounded-[3rem] w-full max-w-4xl overflow-hidden ${error ? 'animate-shake border-red-500/50' : ''}`}>
+                    <div className="bg-white/5 p-6 border-b border-white/10 flex justify-between items-center">
                     <div className="flex items-center gap-4">
-                        <div className="text-yellow-400 p-2 bg-red-900 rounded-full">{lock.icon}</div>
-                        <h3 className="font-black text-3xl text-yellow-100 font-serif">{lock.title}</h3>
+                        <div className="text-yellow-400 p-2 bg-white/10 rounded-full border border-white/10">{lock.icon}</div>
+                        <h3 className="font-black text-3xl text-white tracking-tight">{lock.title}</h3>
                     </div>
-                    <button onClick={onClose} className="text-red-300 hover:text-white transition-colors p-2 hover:bg-red-700 rounded-full"><XCircle size={40} /></button>
+                    <button onClick={onClose} className="text-white/60 hover:text-white transition-colors p-2 hover:bg-white/10 rounded-full"><XCircle size={32} /></button>
                     </div>
 
                     <div className="p-10 max-h-[80vh] overflow-y-auto">
@@ -425,20 +490,20 @@
 
                     {lock.video && (
                         <div className="flex justify-center mb-8 relative group">
-                        <iframe width="560" height="315" src={`https://www.youtube.com/embed/${lock.video}?start=1`} title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen className="rounded-2xl shadow-xl border-4 border-yellow-500"></iframe>
+                        <iframe width="560" height="315" src={`https://www.youtube.com/embed/${lock.video}?start=1`} title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen className="rounded-2xl shadow-xl border border-white/20"></iframe>
                         </div>
                     )}
 
                     {lock.image && (
                         <div className="flex justify-center mb-8 relative group">
-                        <img src={lock.image} alt="Clue" onClick={() => setIsImageZoomed(true)} className="rounded-2xl shadow-xl border-4 border-yellow-500 max-h-64 object-contain bg-black/20 cursor-zoom-in transition-transform hover:scale-[1.02]" />
-                        <div className="absolute bottom-2 bg-black/60 text-white text-xs px-2 py-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">Click to Enlarge</div>
+                        <img src={lock.image} alt="Clue" onClick={() => setIsImageZoomed(true)} className="rounded-2xl shadow-2xl border border-white/20 max-h-64 object-contain bg-black/40 cursor-zoom-in transition-transform hover:scale-[1.02]" />
+                        <div className="absolute bottom-2 bg-black/60 text-white text-xs px-3 py-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none backdrop-blur-md">Click to Enlarge</div>
                         </div>
                     )}
 
                     {lock.link && (
                         <div className="flex justify-center mb-6">
-                            <a href={lock.link} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 bg-yellow-500 hover:bg-yellow-400 text-red-900 font-black text-2xl py-4 px-8 rounded-2xl transition-transform hover:scale-105 shadow-xl border-b-4 border-yellow-700 active:border-b-0 active:translate-y-1">
+                            <a href={lock.link} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 glass-button text-white font-black text-2xl py-4 px-8 rounded-2xl transition-transform hover:scale-105 shadow-xl hover:bg-white/10">
                             <ExternalLink size={28} /> SOLVE PUZZLE
                             </a>
                         </div>
@@ -448,14 +513,14 @@
                         <div className="space-y-8 max-w-2xl mx-auto">
                         {lock.type === 'bingo_launch' && (
                             <div className="flex justify-center mb-6">
-                            <button onClick={() => setShowInternalBingo(true)} className="flex items-center gap-3 bg-yellow-500 hover:bg-yellow-400 text-red-900 font-black text-2xl py-4 px-8 rounded-2xl transition-transform hover:scale-105 shadow-xl border-b-4 border-yellow-700 active:border-b-0 active:translate-y-1">
+                            <button onClick={() => setShowInternalBingo(true)} className="flex items-center gap-3 glass-button text-white font-black text-2xl py-4 px-8 rounded-2xl transition-transform hover:scale-105 shadow-xl hover:bg-white/10">
                                 <ExternalLink size={28} /> OPEN BINGO BOARD
                             </button>
                             </div>
                         )}
                         <form onSubmit={handleSubmit} className="space-y-6">
-                            <input autoFocus type={lock.type === 'numeric' ? 'tel' : 'text'} value={inputValue} onChange={(e) => setInputValue(e.target.value)} placeholder={lock.type === 'bingo_launch' ? "ENTER CODE..." : "ANSWER..."} className="w-full bg-red-900 border-4 border-red-600 rounded-[2rem] px-8 py-6 text-5xl text-center text-yellow-100 placeholder-red-400 focus:outline-none focus:border-yellow-500 focus:ring-4 focus:ring-yellow-500/20 transition-all font-black uppercase tracking-widest" />
-                            <button type="submit" className="w-full bg-gradient-to-r from-yellow-500 to-yellow-400 hover:from-yellow-400 hover:to-yellow-300 text-red-900 font-black text-3xl py-6 rounded-[2rem] transition-all shadow-lg border-b-8 border-yellow-600 active:border-b-0 active:translate-y-2">COLLECT RED PACKET</button>
+                            <input autoFocus type={lock.type === 'numeric' ? 'tel' : 'text'} value={inputValue} onChange={(e) => setInputValue(e.target.value)} placeholder={lock.type === 'bingo_launch' ? "ENTER CODE..." : "ANSWER..."} className="glass-input w-full rounded-[2rem] px-8 py-6 text-5xl text-center placeholder-white/30 focus:outline-none focus:border-yellow-400 focus:ring-4 focus:ring-yellow-400/20 transition-all font-black uppercase tracking-widest" />
+                            <button type="submit" className="w-full bg-gradient-to-r from-yellow-500 to-amber-600 hover:from-yellow-400 hover:to-amber-500 text-white font-black text-3xl py-6 rounded-[2rem] transition-all shadow-lg border border-white/20 active:scale-[0.98]">COLLECT RED PACKET</button>
                         </form>
                         </div>
                     )}
@@ -474,11 +539,11 @@
                         </div>
                         <div className="grid grid-cols-3 gap-4 max-w-[300px] mx-auto">
                             <div />
-                            <button onClick={() => handleSequenceInput('UP')} className="p-6 bg-red-700 hover:bg-yellow-500 hover:text-red-900 text-yellow-100 rounded-2xl flex items-center justify-center transition-colors shadow-lg active:scale-95 border-b-4 border-red-900"><ArrowUp size={40} /></button>
+                            <button onClick={() => handleSequenceInput('UP')} className="p-6 glass-button rounded-2xl flex items-center justify-center transition-colors shadow-lg active:scale-95 hover:bg-white/20"><ArrowUp size={40} className="text-white" /></button>
                             <div />
-                            <button onClick={() => handleSequenceInput('LEFT')} className="p-6 bg-red-700 hover:bg-yellow-500 hover:text-red-900 text-yellow-100 rounded-2xl flex items-center justify-center transition-colors shadow-lg active:scale-95 border-b-4 border-red-900"><ArrowLeft size={40} /></button>
-                            <button onClick={() => handleSequenceInput('DOWN')} className="p-6 bg-red-700 hover:bg-yellow-500 hover:text-red-900 text-yellow-100 rounded-2xl flex items-center justify-center transition-colors shadow-lg active:scale-95 border-b-4 border-red-900"><ArrowDown size={40} /></button>
-                            <button onClick={() => handleSequenceInput('RIGHT')} className="p-6 bg-red-700 hover:bg-yellow-500 hover:text-red-900 text-yellow-100 rounded-2xl flex items-center justify-center transition-colors shadow-lg active:scale-95 border-b-4 border-red-900"><ArrowRight size={40} /></button>
+                            <button onClick={() => handleSequenceInput('LEFT')} className="p-6 glass-button rounded-2xl flex items-center justify-center transition-colors shadow-lg active:scale-95 hover:bg-white/20"><ArrowLeft size={40} className="text-white" /></button>
+                            <button onClick={() => handleSequenceInput('DOWN')} className="p-6 glass-button rounded-2xl flex items-center justify-center transition-colors shadow-lg active:scale-95 hover:bg-white/20"><ArrowDown size={40} className="text-white" /></button>
+                            <button onClick={() => handleSequenceInput('RIGHT')} className="p-6 glass-button rounded-2xl flex items-center justify-center transition-colors shadow-lg active:scale-95 hover:bg-white/20"><ArrowRight size={40} className="text-white" /></button>
                         </div>
                         </div>
                     )}
@@ -487,15 +552,15 @@
                         <div className="space-y-8">
                         <div className="flex justify-center gap-4 mb-4 h-10">
                             {sequence.map((col, i) => (
-                            <div key={i} className={`w-8 h-8 rounded-full bg-${col}-500 ring-4 ring-white/20 shadow-[0_0_15px_currentColor] animate-in zoom-in`} style={{backgroundColor: col === 'yellow' ? '#EAB308' : '#EF4444'}} />
+                            <div key={i} className={`w-8 h-8 rounded-full ring-4 ring-white/20 shadow-[0_0_15px_currentColor] animate-in zoom-in`} style={{backgroundColor: col === 'yellow' ? '#facc15' : '#ef4444'}} />
                             ))}
                         </div>
                         <div className="flex justify-center gap-10">
-                            <button onClick={() => handleSequenceInput('red')} className="w-40 h-40 rounded-3xl transform transition-all active:scale-95 hover:scale-105 shadow-xl border-b-8 border-red-800 bg-red-500 flex flex-col items-center justify-center gap-2 group">
+                            <button onClick={() => handleSequenceInput('red')} className="w-40 h-40 rounded-3xl transform transition-all active:scale-95 hover:scale-105 shadow-xl border-b-8 border-red-900 bg-gradient-to-br from-red-500 to-red-700 flex flex-col items-center justify-center gap-2 group">
                                 <div className="text-white font-black text-2xl group-hover:scale-110 transition-transform">RED</div>
                             </button>
-                            <button onClick={() => handleSequenceInput('yellow')} className="w-40 h-40 rounded-3xl transform transition-all active:scale-95 hover:scale-105 shadow-xl border-b-8 border-yellow-600 bg-yellow-400 flex flex-col items-center justify-center gap-2 group">
-                                <div className="text-red-900 font-black text-2xl group-hover:scale-110 transition-transform">GOLD</div>
+                            <button onClick={() => handleSequenceInput('yellow')} className="w-40 h-40 rounded-3xl transform transition-all active:scale-95 hover:scale-105 shadow-xl border-b-8 border-yellow-700 bg-gradient-to-br from-yellow-400 to-yellow-600 flex flex-col items-center justify-center gap-2 group">
+                                <div className="text-white font-black text-2xl group-hover:scale-110 transition-transform">GOLD</div>
                             </button>
                         </div>
                         </div>
@@ -506,22 +571,22 @@
                         {cards.map((card, index) => {
                             const isFlipped = flipped.includes(index) || solved.includes(card.id);
                             return (
-                            <button key={index} onClick={() => handleCardClick(index)} className={`aspect-square rounded-2xl flex items-center justify-center shadow-lg transition-all duration-300 transform perspective-1000 border-b-8 ${isFlipped ? 'bg-yellow-100 text-red-600 rotate-y-180 border-yellow-300' : 'bg-red-700 border-red-900 hover:bg-red-600 hover:-translate-y-1'}`}>
-                                {isFlipped ? <div className="animate-in zoom-in spin-in-180 duration-300 scale-150">{card.icon}</div> : <div className="text-yellow-500/30 text-4xl font-serif font-bold">福</div>}
+                            <button key={index} onClick={() => handleCardClick(index)} className={`glass-button aspect-square rounded-2xl flex items-center justify-center shadow-lg transition-all duration-300 transform perspective-1000 ${isFlipped ? 'bg-white/20 text-yellow-400 rotate-y-180' : 'hover:bg-white/10 hover:-translate-y-1'}`}>
+                                {isFlipped ? <div className="animate-in zoom-in spin-in-180 duration-300 scale-150">{card.icon}</div> : <div className="text-white/30 text-4xl font-serif font-bold">福</div>}
                             </button>
                             );
                         })}
                         </div>
                     )}
 
-                    <div className="mt-10 pt-8 border-t-2 border-red-700/50 flex justify-center">
+                    <div className="mt-10 pt-8 border-t border-white/10 flex justify-center">
                         {!showHint ? (
-                        <button onClick={() => { sounds.click(); setShowHint(true); }} className="flex items-center gap-3 text-red-300 hover:text-yellow-300 text-xl mx-auto transition-colors font-bold px-6 py-3 rounded-full hover:bg-red-900/50">
+                        <button onClick={() => { sounds.click(); setShowHint(true); }} className="flex items-center gap-3 text-white/60 hover:text-yellow-400 text-xl mx-auto transition-colors font-bold px-6 py-3 rounded-full hover:bg-white/5">
                             <HelpCircle size={24} /> Need a hint?
                         </button>
                         ) : (
-                        <div className="bg-yellow-900/40 border-2 border-yellow-500/30 rounded-2xl p-6 text-center animate-in fade-in max-w-lg">
-                            <p className="text-yellow-400 text-xl font-bold">HINT: {lock.hint}</p>
+                        <div className="bg-yellow-400/20 border border-yellow-400/30 rounded-2xl p-6 text-center animate-in fade-in max-w-lg backdrop-blur-md">
+                            <p className="text-yellow-300 text-xl font-bold">HINT: {lock.hint}</p>
                         </div>
                         )}
                     </div>
@@ -529,10 +594,10 @@
                 </div>
 
                 {isImageZoomed && (
-                    <div className="fixed inset-0 z-[100] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-200 cursor-zoom-out" onClick={() => setIsImageZoomed(false)}>
+                    <div className="fixed inset-0 z-[100] bg-black/90 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in duration-200 cursor-zoom-out" onClick={() => setIsImageZoomed(false)}>
                         <div className="relative max-w-full max-h-full">
-                            <img src={lock.image} alt="Clue Fullscreen" className="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl" />
-                            <p className="text-white text-center mt-4 font-bold text-lg animate-pulse">Tap to close</p>
+                            <img src={lock.image} alt="Clue Fullscreen" className="max-w-full max-h-[90vh] object-contain rounded-xl shadow-2xl border border-white/10" />
+                            <p className="text-white text-center mt-6 font-bold text-lg animate-pulse tracking-widest">TAP TO CLOSE</p>
                         </div>
                     </div>
                 )}
@@ -579,9 +644,9 @@
             { id: 2, type: 'numeric', title: 'Horse Math', clue: 'Solve the equation in the picture!', hint: 'Remember: Multiplication before Subtraction.', answer: '20', isLocked: true, icon: <Calculator className="w-12 h-12" />, image: 'https://i.imgur.com/iF4CtBB.png' },
             { id: 3, type: 'directional', title: 'Lion Dance', clue: 'Follow the steps: Jump UP, Bow DOWN, Step LEFT, Step RIGHT.', hint: 'Up, Down, Left, Right', answer: ['UP', 'DOWN', 'LEFT', 'RIGHT'], isLocked: true, icon: <Zap className="w-12 h-12" />, image: 'https://i.imgur.com/NImcNJY.png' },
             { id: 4, type: 'color', title: 'Lucky Colors', clue: 'Tap order: Red Lantern, Gold Coin, Red Firecracker, Gold Ingot.', hint: 'Red, Yellow, Red, Yellow', answer: ['red', 'yellow', 'red', 'yellow'], isLocked: true, icon: <Scroll className="w-12 h-12" /> },
-            { id: 5, type: 'numeric', title: 'Festive Video', clue: 'Watch the video and add the answers:\n1. How many times did you hear "gong xi"?\n2. How many types of zodiac animals appeared?', hint: 'Not all animals in the video are in the Chinese zodiac.', answer: '19', isLocked: true, icon: <Video className="w-12 h-12" />, video: 'fS1MyAGXaKg' },
+            { id: 5, type: 'numeric', title: 'Festive Video', clue: 'Watch the video and answer:\n1. How many times did you hear "gong xi"?\n2. How many types of zodiac animals appeared?', hint: 'Add the two numbers together.', answer: '19', isLocked: true, icon: <Video className="w-12 h-12" />, video: 'fS1MyAGXaKg' },
             { id: 6, type: 'text', title: 'The Greeting', clue: 'Finish: "Gong Xi Fa ___"', hint: 'Rhymes with "Eye".', answer: 'CAI', isLocked: true, icon: <Gift className="w-12 h-12" /> },
-            { id: 7, type: 'bingo_launch', title: 'Class Photo', clue: 'Upload a Class Photo on the Bingo Board. Enter the code you receive!', hint: 'The code is "CNY" followed by the year.', answer: 'CNY2026', isLocked: true, icon: <Camera className="w-12 h-12" /> },
+            { id: 7, type: 'bingo_launch', title: 'Class Photo', clue: 'Upload a Class Photo with "Heart" signs ❤️ on the Bingo Board. Enter the code you receive!', hint: 'The code is "CNY" followed by the year.', answer: 'CNY2026', isLocked: true, icon: <Camera className="w-12 h-12" /> },
             { id: 8, type: 'memory', title: 'Fortune Match', clue: 'Find all matching pairs!', hint: '4 pairs to find.', answer: 'MEMORY_SOLVED', isLocked: true, icon: <LayoutGrid className="w-12 h-12" /> }
           ]);
 
@@ -634,7 +699,7 @@
           };
 
           return (
-            <div ref={containerRef} className="min-h-screen bg-rose-100 text-red-900 font-sans selection:bg-yellow-400 selection:text-red-900 overflow-hidden relative">
+            <div ref={containerRef} className="min-h-screen font-sans text-white overflow-hidden relative">
               
               {!isMuted && gameState !== 'start' && (
                 <div className="fixed top-0 left-0 w-[1px] h-[1px] opacity-[0.01] overflow-hidden pointer-events-none z-0">
@@ -642,91 +707,89 @@
                 </div>
               )}
 
-              <div className="fixed top-4 right-4 z-50 flex items-center gap-3">
-                <button onClick={toggleFullScreen} className="p-4 rounded-full bg-red-800/90 border-2 border-yellow-400 text-yellow-400 hover:bg-red-700 transition-colors shadow-xl" title="Toggle Full Screen">
-                  {isFullScreen ? <Minimize size={32} /> : <Maximize size={32} />}
+              <div className="fixed top-6 right-6 z-50 flex items-center gap-4">
+                <button onClick={toggleFullScreen} className="p-3 rounded-full glass-button text-white hover:bg-white/10 transition-colors shadow-lg" title="Toggle Full Screen">
+                  {isFullScreen ? <Minimize size={28} /> : <Maximize size={28} />}
                 </button>
-                <button onClick={() => setIsMuted(!isMuted)} className="p-4 rounded-full bg-red-800/90 border-2 border-yellow-400 text-yellow-400 hover:bg-red-700 transition-colors shadow-xl" title="Toggle Sound">
-                  {isMuted ? <VolumeX size={32} /> : <Volume2 size={32} />}
+                <button onClick={() => setIsMuted(!isMuted)} className="p-3 rounded-full glass-button text-white hover:bg-white/10 transition-colors shadow-lg" title="Toggle Sound">
+                  {isMuted ? <VolumeX size={28} /> : <Volume2 size={28} />}
                 </button>
-              </div>
-
-              <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-                <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-orange-300 rounded-full blur-[120px] opacity-20" />
-                <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-yellow-300 rounded-full blur-[120px] opacity-20" />
               </div>
 
               {gameState === 'start' && (
                 <div className="relative z-10 flex flex-col items-center justify-center min-h-screen p-6 text-center">
-                  <div className="mb-10 p-12 bg-red-800/90 backdrop-blur-xl border-4 border-yellow-500/50 rounded-[3rem] shadow-2xl max-w-3xl w-full animate-in fade-in zoom-in duration-500">
-                    <div className="flex justify-center mb-8"><div className="bg-yellow-500/20 p-8 rounded-full border-4 border-yellow-500 shadow-[0_0_40px_rgba(245,158,11,0.6)]"><Flame size={80} className="text-yellow-400" /></div></div>
-                    <h1 className="text-7xl font-black text-transparent bg-clip-text bg-gradient-to-br from-yellow-300 via-yellow-400 to-orange-500 mb-4 tracking-tight drop-shadow-sm leading-tight">CNY 2026</h1>
-                    <p className="text-3xl font-serif text-yellow-200/90 italic mb-8">Year of the Horse</p>
-                    <p className="text-2xl text-red-200 mb-8 font-bold">Collect all 8 Red Packets to win!</p>
-                    <div className="bg-red-900/50 p-6 rounded-2xl mb-8 border-2 border-red-700">
-                       <label className="block text-red-200 text-xl font-bold mb-2 uppercase tracking-wider">Enter Class Name</label>
-                       <input type="text" value={className} onChange={(e) => setClassName(e.target.value)} placeholder="e.g. 4 CARE" className="w-full text-center text-4xl font-black text-yellow-400 bg-red-800 border-b-4 border-yellow-500 focus:outline-none focus:border-yellow-300 py-2 placeholder-red-700/50 uppercase" />
+                  <div className="glass-panel p-16 rounded-[3rem] max-w-3xl w-full animate-in fade-in zoom-in duration-500 flex flex-col items-center">
+                    <div className="mb-8 p-8 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full shadow-lg shadow-orange-500/20"><Flame size={80} className="text-white" /></div>
+                    <h1 className="text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 via-yellow-400 to-amber-500 mb-2 tracking-tighter drop-shadow-sm">CNY 2026</h1>
+                    <p className="text-3xl font-light text-white/80 mb-10 tracking-widest uppercase">Virtual Breakout</p>
+                    <div className="w-full max-w-md mb-10">
+                       <label className="block text-white/60 text-sm font-bold mb-3 uppercase tracking-widest">Enter Class Name</label>
+                       <input type="text" value={className} onChange={(e) => setClassName(e.target.value)} placeholder="e.g. 4 CARE" className="glass-input w-full text-center text-4xl font-black rounded-2xl py-4 placeholder-white/20 focus:outline-none focus:border-yellow-400 focus:ring-2 focus:ring-yellow-400/20 transition-all uppercase" />
                     </div>
-                    <button onClick={handleStart} className={`group relative w-full flex items-center justify-center gap-4 bg-gradient-to-r from-yellow-500 to-yellow-400 hover:from-yellow-400 hover:to-yellow-300 text-red-900 px-12 py-8 rounded-[2rem] font-black text-4xl transition-all shadow-[0_8px_30px_rgba(234,179,8,0.4)] border-b-8 border-yellow-600 active:border-b-0 active:translate-y-2 ${!className ? 'opacity-50 cursor-not-allowed grayscale' : 'hover:scale-[1.02]'}`}>
-                      <Play className="fill-current w-10 h-10" /> START GAME
+                    <button onClick={handleStart} className={`group w-full max-w-md flex items-center justify-center gap-4 bg-gradient-to-r from-yellow-500 to-amber-600 hover:from-yellow-400 hover:to-amber-500 text-white px-12 py-6 rounded-2xl font-black text-3xl transition-all shadow-lg shadow-amber-500/20 active:scale-[0.98] ${!className ? 'opacity-50 cursor-not-allowed grayscale' : ''}`}>
+                      <Play className="fill-current w-8 h-8" /> START
                     </button>
                   </div>
                 </div>
               )}
 
               {gameState === 'playing' && (
-                <div className="relative z-10 container mx-auto px-4 py-8 max-w-7xl h-screen flex flex-col">
-                  <header className="flex justify-between items-center mb-8 bg-red-800/80 backdrop-blur-md p-6 rounded-3xl border-2 border-red-500 shadow-xl">
-                    <div className="flex items-center gap-4">
-                      <div className="bg-yellow-500/20 p-3 rounded-xl border-2 border-yellow-500/40 animate-pulse"><Users className="w-6 h-6 text-yellow-400" /></div>
-                      <div className="flex flex-col"><span className="font-serif text-3xl font-bold tracking-widest text-yellow-200 leading-none">RED PACKET HUNT</span><span className="text-red-300 text-sm font-bold tracking-wider">PLAYER: {className}</span></div>
+                <div className="relative z-10 container mx-auto px-6 py-10 max-w-7xl h-screen flex flex-col">
+                  <header className="glass-panel flex justify-between items-center mb-10 p-6 rounded-3xl">
+                    <div className="flex items-center gap-6">
+                      <div className="bg-yellow-500/20 p-4 rounded-2xl border border-yellow-500/30"><Users className="w-8 h-8 text-yellow-400" /></div>
+                      <div className="flex flex-col">
+                        <span className="text-3xl font-black tracking-tighter text-white">RED PACKET HUNT</span>
+                        <span className="text-white/50 text-sm font-bold tracking-widest uppercase">Player: {className}</span>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-3 font-mono text-4xl font-bold text-yellow-400"><Clock className="w-8 h-8" />{formatTime(timer)}</div>
+                    <div className="flex items-center gap-4 font-mono text-5xl font-bold text-yellow-400 drop-shadow-md"><Clock className="w-10 h-10" />{formatTime(timer)}</div>
                   </header>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-6 flex-grow content-center pb-8">
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-8 flex-grow content-center pb-8">
                     {locks.map((lock) => (
-                      <button key={lock.id} onClick={() => { if (lock.isLocked) { sounds.click(); setActiveLockId(lock.id); } }} disabled={!lock.isLocked} className={`relative group flex flex-col items-center justify-center p-6 rounded-[2rem] border-4 transition-all duration-300 h-full min-h-[180px] ${!lock.isLocked ? 'bg-yellow-500/90 border-yellow-600 shadow-[0_0_30px_rgba(234,179,8,0.5)] transform scale-[1.02]' : 'bg-red-800 border-red-700 hover:border-yellow-400 hover:bg-red-700 hover:scale-[1.05] hover:shadow-2xl cursor-pointer'}`}>
-                        <div className={`mb-4 p-5 rounded-full transition-colors duration-500 ${!lock.isLocked ? 'bg-red-600 text-yellow-300' : 'bg-red-900 text-red-200 group-hover:bg-yellow-500/20 group-hover:text-yellow-400'}`}>
+                      <button key={lock.id} onClick={() => { if (lock.isLocked) { sounds.click(); setActiveLockId(lock.id); } }} disabled={!lock.isLocked} className={`glass-card relative group flex flex-col items-center justify-center p-8 rounded-[2rem] h-full min-h-[200px] ${!lock.isLocked ? 'border-yellow-400/50 bg-yellow-500/10' : 'hover:bg-white/5 hover:-translate-y-2'}`}>
+                        <div className={`mb-6 p-6 rounded-full transition-all duration-500 ${!lock.isLocked ? 'bg-yellow-500 text-red-900 shadow-lg shadow-yellow-500/20' : 'bg-white/10 text-white/50 group-hover:bg-white/20 group-hover:text-yellow-400'}`}>
                           {lock.isLocked ? <Mail size={48} /> : <MailOpen size={48} className="animate-in zoom-in" />}
                         </div>
-                        <h3 className={`font-black text-2xl mb-1 text-center leading-tight ${!lock.isLocked ? 'text-red-800' : 'text-white'}`}>{!lock.isLocked ? 'COLLECTED!' : lock.title}</h3>
+                        <h3 className={`font-black text-2xl mb-1 text-center leading-tight ${!lock.isLocked ? 'text-yellow-400' : 'text-white/80'}`}>{!lock.isLocked ? 'COLLECTED!' : lock.title}</h3>
                       </button>
                     ))}
                   </div>
-                  <div className="text-center text-red-800 text-3xl font-black font-serif drop-shadow-sm">{locks.filter(l => !l.isLocked).length} / {locks.length} RED PACKETS COLLECTED</div>
                 </div>
               )}
 
               {activeLockId && <PuzzleModal lock={locks.find(l => l.id === activeLockId)} onClose={() => { sounds.click(); setActiveLockId(null); }} onUnlock={handleUnlock} sounds={sounds} db={db} className={className} />}
 
               {gameState === 'won' && (
-                <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-rose-100/95 backdrop-blur-xl animate-in fade-in duration-1000 overflow-y-auto py-10">
+                <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black/80 backdrop-blur-xl animate-in fade-in duration-1000 overflow-y-auto py-10">
                   <FireConfetti />
                   <div className="relative z-10 w-full max-w-4xl mx-auto px-4 flex flex-col items-center">
-                    <div className="bg-red-800/90 border-4 border-yellow-500/50 rounded-[3rem] shadow-2xl p-8 mb-8 w-full max-w-2xl text-center transform scale-100 animate-in zoom-in-50 duration-500">
-                      <div className="inline-flex p-6 rounded-full bg-yellow-500/20 mb-6 border-4 border-yellow-500 shadow-[0_0_60px_rgba(234,179,8,0.5)]"><div className="text-yellow-400 font-black text-6xl">🧧</div></div>
-                      <h2 className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-yellow-500 mb-2 tracking-tighter">HUNT COMPLETE!</h2>
-                      <p className="text-2xl text-yellow-200/90 font-serif italic mb-6">Congratulations, {className}!</p>
-                      <div className="bg-red-900/50 rounded-2xl p-4 border-2 border-red-700 inline-flex items-center gap-4"><span className="text-red-200 font-bold">Your Time:</span><span className="font-mono text-3xl text-white font-black">{formatTime(timer)}</span></div>
+                    <div className="glass-panel p-12 rounded-[3rem] w-full max-w-2xl text-center transform scale-100 animate-in zoom-in-50 duration-500 mb-8 border border-yellow-500/30">
+                      <div className="inline-flex p-8 rounded-full bg-gradient-to-br from-yellow-400 to-amber-600 mb-8 shadow-xl shadow-amber-500/30"><div className="text-white font-black text-7xl">🧧</div></div>
+                      <h2 className="text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 via-yellow-400 to-amber-500 mb-4 tracking-tighter">HUNT COMPLETE!</h2>
+                      <p className="text-3xl text-white/80 font-light mb-10">Congratulations, {className}!</p>
+                      <div className="bg-white/5 rounded-2xl p-6 border border-white/10 inline-flex items-center gap-6"><span className="text-white/60 font-bold uppercase tracking-widest text-sm">Final Time</span><span className="font-mono text-4xl text-yellow-400 font-black">{formatTime(timer)}</span></div>
                     </div>
-                    <div className="bg-red-900/80 border-2 border-red-600 rounded-[2rem] p-8 w-full shadow-2xl">
-                      <div className="flex items-center justify-center gap-3 mb-6"><Trophy className="text-yellow-400 w-8 h-8" /><h3 className="text-3xl font-black text-yellow-400 tracking-wider">LEADERBOARD</h3><Trophy className="text-yellow-400 w-8 h-8" /></div>
-                      <div className="overflow-hidden rounded-xl border-2 border-red-700">
+                    
+                    <div className="glass-panel p-8 rounded-[2.5rem] w-full border border-white/10">
+                      <div className="flex items-center justify-center gap-4 mb-8"><Trophy className="text-yellow-400 w-8 h-8" /><h3 className="text-2xl font-black text-white tracking-widest uppercase">Leaderboard</h3><Trophy className="text-yellow-400 w-8 h-8" /></div>
+                      <div className="overflow-hidden rounded-2xl border border-white/10">
                         <table className="w-full text-left">
-                          <thead className="bg-red-800 text-red-200"><tr><th className="p-4 font-bold text-center w-20">Rank</th><th className="p-4 font-bold">Class Name</th><th className="p-4 font-bold text-right">Time</th></tr></thead>
-                          <tbody className="divide-y divide-red-800 bg-red-900/50">
-                            {leaderboard.length === 0 ? (<tr><td colSpan="3" className="p-8 text-center text-red-400 italic">No scores yet. Be the first!</td></tr>) : (leaderboard.map((entry, index) => (
-                              <tr key={index} className={entry.className === className && entry.time === timer ? "bg-yellow-500/20" : ""}>
-                                <td className="p-4 text-center font-black text-xl text-red-300">{index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : index + 1}</td>
-                                <td className="p-4 font-bold text-lg text-white">{entry.className}{entry.className === className && entry.time === timer && <span className="ml-2 text-xs bg-yellow-500 text-red-900 px-2 py-1 rounded-full">YOU</span>}</td>
-                                <td className="p-4 text-right font-mono text-xl text-yellow-400">{formatTime(entry.time)}</td>
+                          <thead className="bg-white/5 text-white/60 uppercase text-sm tracking-wider"><tr><th className="p-4 font-bold text-center w-20">Rank</th><th className="p-4 font-bold">Class Name</th><th className="p-4 font-bold text-right">Time</th></tr></thead>
+                          <tbody className="divide-y divide-white/5">
+                            {leaderboard.length === 0 ? (<tr><td colSpan="3" className="p-8 text-center text-white/40 italic">No scores yet.</td></tr>) : (leaderboard.map((entry, index) => (
+                              <tr key={index} className={entry.className === className && entry.time === timer ? "bg-yellow-500/20" : "hover:bg-white/5"}>
+                                <td className="p-4 text-center font-black text-xl text-yellow-500">{index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : index + 1}</td>
+                                <td className="p-4 font-bold text-lg text-white">{entry.className}{entry.className === className && entry.time === timer && <span className="ml-3 text-[10px] bg-yellow-500 text-black px-2 py-1 rounded-md font-black tracking-widest">YOU</span>}</td>
+                                <td className="p-4 text-right font-mono text-xl text-white/80">{formatTime(entry.time)}</td>
                               </tr>
                             )))}
                           </tbody>
                         </table>
                       </div>
                     </div>
-                    <button onClick={() => window.location.reload()} className="mt-8 flex items-center justify-center gap-3 bg-red-600 hover:bg-red-500 text-white px-8 py-4 rounded-xl font-black text-xl transition-colors border-b-4 border-red-800 active:border-b-0 active:translate-y-1"><RotateCcw size={24} /> PLAY AGAIN</button>
+                    
+                    <button onClick={() => window.location.reload()} className="mt-8 flex items-center justify-center gap-3 glass-button text-white px-10 py-5 rounded-2xl font-black text-xl transition-all hover:bg-white/10 hover:scale-105"><RotateCcw size={24} /> PLAY AGAIN</button>
                   </div>
                 </div>
               )}
