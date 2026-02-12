@@ -72,7 +72,7 @@
 
         // Firebase Imports
         import { initializeApp } from "firebase/app";
-        import { getAuth, signInAnonymously, onAuthStateChanged } from "firebase/auth";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "firebase/auth";
         import { getFirestore, collection, addDoc, onSnapshot } from "firebase/firestore";
 
         // --- CONFIGURATION ---
@@ -563,23 +563,42 @@
           const [className, setClassName] = useState('');
           const [leaderboard, setLeaderboard] = useState([]);
           const [hasSubmitted, setHasSubmitted] = useState(false);
+          // Removed logoError state as we are using SVG now
+          const [isOffline, setIsOffline] = useState(false);
           const containerRef = useRef(null);
           
           const { initAudio, sounds } = useAudioSystem(isMuted);
 
           useEffect(() => {
+            const initAuth = async () => {
+                if (!auth) {
+                    setIsOffline(true);
+                    return;
+                }
+                try {
+                    if (typeof window.__initial_auth_token !== 'undefined' && window.__initial_auth_token) {
+                        await signInWithCustomToken(auth, window.__initial_auth_token);
+                    } else {
+                        await signInAnonymously(auth);
+                    }
+                } catch (e) {
+                    console.warn("Auth failed, switching to offline mode:", e);
+                    setIsOffline(true);
+                }
+            };
+            initAuth();
+            
             if(auth) {
-                const unsubscribe = onAuthStateChanged(auth, setUser);
-                signInAnonymously(auth).catch(e => {
-                    console.error("Authentication Error:", e);
-                    // Don't alert user as auth might be optional/silent
+                const unsubscribe = onAuthStateChanged(auth, (u) => {
+                    setUser(u);
+                    if (u) setIsOffline(false);
                 });
                 return () => unsubscribe();
             }
           }, []);
 
           useEffect(() => {
-            if (!db) return;
+            if (!db || isOffline) return;
             const q = collection(db, 'artifacts', appId, 'public', 'data', 'leaderboard');
             const unsubscribe = onSnapshot(q, (snapshot) => {
               const data = snapshot.docs.map(doc => doc.data());
@@ -589,7 +608,7 @@
                 // alert("Leaderboard failed to load. Check console."); 
             });
             return () => unsubscribe();
-          }, []);
+          }, [isOffline]);
 
           // --- GAME DATA ---
           const [locks, setLocks] = useState([
@@ -616,16 +635,16 @@
               setGameState('won');
               sounds.win();
               // Saving score logic
-              if (!hasSubmitted && className && db) {
+              if (!hasSubmitted && className && db && !isOffline) {
                 setHasSubmitted(true);
                 addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'leaderboard'), { className: className, time: timer, timestamp: new Date().toISOString() })
                     .catch(e => {
                         console.error("Save error:", e);
-                        alert("Error saving score to database!");
+                        // Silently fail in offline mode or if permissions are wrong
                     });
               }
             }
-          }, [locks, gameState, className, hasSubmitted, timer]);
+          }, [locks, gameState, className, hasSubmitted, timer, isOffline]);
 
           const toggleFullScreen = () => {
             const el = containerRef.current;
@@ -683,7 +702,15 @@
               {gameState === 'start' && (
                 <div className="relative z-10 flex flex-col items-center justify-center min-h-screen p-6 text-center">
                   <div className="mb-10 p-12 bg-red-800/90 backdrop-blur-xl border-4 border-yellow-500/50 rounded-[3rem] shadow-2xl max-w-3xl w-full animate-in fade-in zoom-in duration-500">
-                    <div className="flex justify-center mb-8"><div className="bg-yellow-500/20 p-8 rounded-full border-4 border-yellow-500 shadow-[0_0_40px_rgba(245,158,11,0.6)]"><Flame size={80} className="text-yellow-400" /></div></div>
+                    <div className="flex justify-center mb-8">
+                        <div className="bg-yellow-500/20 p-6 rounded-3xl border-4 border-yellow-500 shadow-[0_0_40px_rgba(245,158,11,0.6)]">
+                            <img 
+                                src="https://i.imgur.com/JJ2st9U.png" 
+                                alt="Evergreen Primary School Crest" 
+                                className="w-40 h-40 object-contain filter drop-shadow-xl hover:scale-105 transition-transform duration-300"
+                            />
+                        </div>
+                    </div>
                     <h1 className="text-7xl font-black text-transparent bg-clip-text bg-gradient-to-br from-yellow-300 via-yellow-400 to-orange-500 mb-4 tracking-tight drop-shadow-sm leading-tight">CNY 2026</h1>
                     <p className="text-3xl font-serif text-yellow-200/90 italic mb-8">Collect all 8 Red Packets to win!</p>
                     <p className="text-2xl text-red-200 mb-8 font-bold">For a better experience, click the square icon in the top right corner to go full screen.</p>
@@ -764,12 +791,3 @@
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
