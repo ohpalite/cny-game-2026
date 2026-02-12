@@ -433,7 +433,11 @@
 
                     {lock.video && (
                         <div className="flex justify-center mb-6 relative group">
-                        <iframe width="560" height="315" src={`https://www.youtube.com/embed/${lock.video}?start=1`} title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen className="rounded-2xl shadow-xl border-4 border-yellow-500 max-h-[40vh] w-full object-contain"></iframe>
+                        {lock.videoProvider === 'streamable' ? (
+                            <iframe src={`https://streamable.com/e/${lock.video}`} width="560" height="315" frameBorder="0" allowFullScreen className="rounded-2xl shadow-xl border-4 border-yellow-500 max-h-[40vh] w-full object-contain"></iframe>
+                        ) : (
+                            <iframe width="560" height="315" src={`https://www.youtube.com/embed/${lock.video}?start=1`} title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen className="rounded-2xl shadow-xl border-4 border-yellow-500 max-h-[40vh] w-full object-contain"></iframe>
+                        )}
                         </div>
                     )}
 
@@ -591,7 +595,7 @@
           const [locks, setLocks] = useState([
             { id: 1, type: 'numeric', title: 'Jigsaw House', clue: 'What is the unit number of the house?', hint: 'Solve the jigsaw puzzle to see the number.', answer: '6820', isLocked: true, icon: <Puzzle className="w-12 h-12" />, link: 'https://www.jigsawplanet.com/?rc=play&pid=214cf9e0a4a7' },
             { id: 2, type: 'numeric', title: 'Horse Math', clue: 'Solve the equation in the picture!', hint: 'Remember: Multiplication before Subtraction.', answer: '20', isLocked: true, icon: <Calculator className="w-12 h-12" />, image: 'https://i.imgur.com/iF4CtBB.png' },
-            { id: 3, type: 'directional', title: 'Lion Dance', clue: 'Repeat the steps using the arrow keys.', hint: 'A total of 5 moves.', answer: ['DOWN', 'UP', 'LEFT', 'RIGHT', 'LEFT'], isLocked: true, icon: <Zap className="w-12 h-12" />, video: '4_dRypZuUZc' },
+            { id: 3, type: 'directional', title: 'Lion Dance', clue: 'Repeat the steps using the arrow keys.', hint: 'A total of 5 moves.', answer: ['DOWN', 'UP', 'LEFT', 'RIGHT', 'LEFT'], isLocked: true, icon: <Zap className="w-12 h-12" />, video: 'lslg9f', videoProvider: 'streamable' },
             { id: 4, type: 'color', title: 'Lucky Colors', clue: 'Tap order: Lantern, Coin, Firecracker, Ingot.', hint: 'Red, Yellow, Red, Yellow', answer: ['red', 'yellow', 'red', 'yellow'], isLocked: true, icon: <Scroll className="w-12 h-12" /> },
             { id: 5, type: 'numeric', title: 'Festive Video', clue: 'Watch the video and add the two answers together:\n1. How many times did you hear "gong xi"?\n2. How many types of zodiac animals appeared?', hint: 'Not all the animals in the video are in the Chinese zodiac.', answer: '19', isLocked: true, icon: <Video className="w-12 h-12" />, video: 'fS1MyAGXaKg' },
             { id: 6, type: 'text', title: 'The Greeting', clue: 'Finish: "Gong Xi Fa ___"', hint: 'Rhymes with "Eye".', answer: 'CAI', isLocked: true, icon: <Gift className="w-12 h-12" /> },
@@ -684,8 +688,8 @@
                     <p className="text-3xl font-serif text-yellow-200/90 italic mb-8">Collect all 8 Red Packets to win!</p>
                     <p className="text-2xl text-red-200 mb-8 font-bold">For a better experience, click the square icon in the top right corner to go full screen.</p>
                     <div className="bg-red-900/50 p-6 rounded-2xl mb-8 border-2 border-red-700">
-                       <label className="block text-red-200 text-xl font-bold mb-2 uppercase tracking-wider">Enter Class Name</label>
-                       <input type="text" value={className} onChange={(e) => setClassName(e.target.value)} placeholder="e.g. 4 CARE" className="w-full text-center text-4xl font-black text-yellow-400 bg-red-800 border-b-4 border-yellow-500 focus:outline-none focus:border-yellow-300 py-2 placeholder-red-700/50 uppercase" />
+                        <label className="block text-red-200 text-xl font-bold mb-2 uppercase tracking-wider">Enter Class Name</label>
+                        <input type="text" value={className} onChange={(e) => setClassName(e.target.value)} placeholder="e.g. 4 CARE" className="w-full text-center text-4xl font-black text-yellow-400 bg-red-800 border-b-4 border-yellow-500 focus:outline-none focus:border-yellow-300 py-2 placeholder-red-700/50 uppercase" />
                     </div>
                     <button onClick={handleStart} className={`group relative w-full flex items-center justify-center gap-4 bg-gradient-to-r from-yellow-500 to-yellow-400 hover:from-yellow-400 hover:to-yellow-300 text-red-900 px-12 py-8 rounded-[2rem] font-black text-4xl transition-all shadow-[0_8px_30px_rgba(234,179,8,0.4)] border-b-8 border-yellow-600 active:border-b-0 active:translate-y-2 ${!className ? 'opacity-50 cursor-not-allowed grayscale' : 'hover:scale-[1.02]'}`}>
                       <Play className="fill-current w-10 h-10" /> START GAME
